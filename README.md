@@ -1,6 +1,13 @@
 # barra_description
+### Install dependensies
 
-On Jetson NX with Ubuntu 20.04 need execute this commands
+sudo apt install ros-foxy-rqt-image-view
+
+sudo apt install ros-foxy-image-transport-plugins
+
+sudo apt install ros-foxy-v4l2-camera
+
+### On Jetson NX with Ubuntu 20.04 need execute this commands
 
 sudo chmod 666 /dev/ttyACM0
 
@@ -31,7 +38,7 @@ To automate the process
 
  3. Enable the service to run at startup using the following command:
    ```
-   sudo systemctl enable chmod-ttyACM0.service
+   sudo systemctl enable chmod-USB.service
    ```
  4. Reboot your system, and the command will be executed automatically    after startup.
 
@@ -41,6 +48,9 @@ To automate the process
 
 
 colcon build --packages-select barra_description
+
+
+ros2 launch barra_description launch_sim.launch.py world:=./src/barra_desription/worlds/obstacles.world
 
 sudo bluetoothctl
 
