@@ -3,7 +3,7 @@
 <package format="3">
   <name>barra_description</name>
   <version>0.0.0</version>
-  <description>TODO: Description of indoor diff rover barra</description>
+  <description>TODO: Description of indoor diff rover barra with two caster wheels</description>
   <maintainer email="kraft2k@yandex.ru">kraft</maintainer>
   <license>TODO: License declaration</license>
 
