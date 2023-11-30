@@ -50,7 +50,7 @@ To automate the process
 colcon build --packages-select barra_description
 
 
-ros2 launch barra_description launch_sim.launch.py world:=./src/barra_desription/worlds/obstacles.world
+ros2 launch barra_description launch_sim.launch.py world:=./src/barra_description/worlds/obstacles.world
 
 sudo bluetoothctl
 
