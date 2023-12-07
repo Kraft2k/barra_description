@@ -64,4 +64,41 @@ ros2 launch barra_description rplidar.launch.py
 
 ros2 launch barra_description joystick.launch.py
 
-ros2 launch slam_toolbox online_async_launch.py params_file:=./src/barra_description/config/mapper_params_online_async.yaml use_sim_time:=false
+
+### Simulation
+
+ros2 launch barra_description launch_sim.launch.py world:=./src/barra_description/worlds/obstacle.world
+
+
+
+
+###For mapping
+
+ros2 launch slam_toolbox online_async_launch.py params_file:=./ros2_ws/src/barra_description/config/mapper_params_online_async.yaml use_sim_time:=false
+
+###For navigation
+
+ros2 launch nav2_bringup navigation_launch.py use_sim_time:=false
+
+add map and add topic /global_costmap
+
+
+###Camera
+
+
+ros2 run realsense2_camera realsense2_camera_node
+
+
+ros2 run realsense2_camera realsense2_camera_node --ros-args -p camera_frame_id:='camera_link_optical'
+
+
+ros2 run rqt_image_view rqt_image_view
+
+ros2 run image_transport republish compressed raw --ros-args -r in/compressed:=/color/image_raw/compressed -r out:=/camera/image_raw/uncompressed
+
+ros2 launch ball_tracker ball_tracker.launch.py tune_detection:=true detect_only:=true image_topic:=/camera/image_raw/uncompressed
+
+ros2 run ball_tracker detect_ball --ros-args -p tuning_mode:=true -r image_in:=camera/image_raw
+
+
+ros2 launch ball_tracker ball_tracker.launch.py params_file:=src/barra_description/config/ball_tracker_params_robot.yaml image_topic:=/camera/image_raw/uncompressed
