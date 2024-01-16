@@ -3,13 +3,13 @@ detect_ball:
     # tuning_mode: false # Could set this here but leave it off so it can be easily set by the launch script
     x_min: 0
     x_max: 100
-    y_min: 54
+    y_min: 48
     y_max: 100
-    h_min: 25
-    h_max: 84
-    s_min: 43
-    s_max: 140
-    v_min: 52
+    h_min: 28
+    h_max: 72
+    s_min: 26
+    s_max: 157
+    v_min: 16
     v_max: 255
     sz_min: 0
     sz_max: 100
@@ -23,7 +23,7 @@ detect_ball_3d:
 follow_ball:
   ros__parameters:
     rcv_timeout_secs: 1.0
-    angular_chase_multiplier: 
+    angular_chase_multiplier: 0.3
     forward_chase_speed: 0.1
     search_angular_speed: 0.25
     max_size_thresh: 0.1
