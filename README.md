@@ -1,5 +1,18 @@
 # barra_description
+
 ### Install dependensies
+
+sudo apt install ros-foxy-xacro
+
+sudo apt install ros-foxy-twist-mux
+
+sudo apt install ros-foxy-diagnostic-updater
+
+sudo apt install ros-foxy-tf-transformations
+
+sudo apt install ros-foxy-ros2-control ros-foxy-ros2-controllers
+
+sudo apt install ros-foxy-librealsense2-*
 
 sudo apt install ros-foxy-rqt-image-view
 
@@ -44,25 +57,35 @@ To automate the process
 
 
  
-
-
+### Build package
 
 colcon build --packages-select barra_description
 
 
 ros2 launch barra_description launch_sim.launch.py world:=./src/barra_description/worlds/obstacles.world
 
+### Connect joystick
+
 sudo bluetoothctl
 
-connect 90:E9:D2:3B:C6:AF
+last four digits of joystick: 9866
 
-ros2 run zuuu_hal hal
+ros2 launch barra_description joystick.launch.py
 
-ros2 launch barra_description launch_robot.launch.py
+
+### Run safety behaviour
+
 
 ros2 launch barra_description rplidar.launch.py
 
-ros2 launch barra_description joystick.launch.py
+
+
+ros2 launch barra_description launch_robot.launch.py
+
+
+ros2 run mobile_base_unit mobile_base
+
+
 
 
 ### Simulation
@@ -73,6 +96,13 @@ ros2 launch barra_description launch_sim.launch.py world:=./src/barra_descriptio
 
 
 ### For mapping
+
+ros2 launch barra_description launch_robot.launch.py
+
+
+ros2 run mobile_base_unit mobile_base
+
+
 
 ros2 launch slam_toolbox online_async_launch.py params_file:=./ros2_ws/src/barra_description/config/mapper_params_online_async.yaml use_sim_time:=false
 
@@ -90,7 +120,6 @@ ros2 run realsense2_camera realsense2_camera_node
 
 
 ros2 run realsense2_camera realsense2_camera_node --ros-args -p camera_frame_id:='camera_link_optical'
-
 
 ros2 run rqt_image_view rqt_image_view
 
@@ -111,23 +140,33 @@ ros2 run realsense2_camera realsense2_camera_node
 
 ros2 run ros2_aruco aruco_node
 
-ros2 run zuuu_hal follow_aruco_marker
+ros2 run mobile_base_unit mobile_base
 
-i have python code:
+ros2 run mobile_base_unit follow_aruco_marker
 
-def __init__(self):
-    ...
-    self.aruco_pose = None
-    ...
+### Find aruco markers
 
-def listener_callback(self, msg):
-    self.aruco_pose = msg
+ros2 run realsense2_camera realsense2_camera_node
 
-when 
-    print(self.aruco_pose)
+ros2 run ros2_aruco aruco_node
 
-i have got in Camera Optical Coordinate System: (X: Right, Y: Down, Z: Forward)
+ros2 run mobile_base_unit mobile_base
 
-aruco_interfaces.msg.ArucoMarkers(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=1703326493, nanosec=414563840), frame_id='camera_color_optical_frame'), marker_ids=[1], poses=[geometry_msgs.msg.Pose(position=geometry_msgs.msg.Point(x=0.04382051592484606, y=0.09037536474138382, z=1.0178971773234575), orientation=geometry_msgs.msg.Quaternion(x=-0.6940590427542259, y=-0.7169814474339044, z=-0.05760926130094859, w=0.030013700522091992))])
+ros2 run mobile_base_unit find_markers_server
 
-how can transform to ROS2 Coordinate System: (X: Forward, Y:Left, Z: Up)
+ros2 run mobile_base_unit find_markers_client
+
+
+### Voice control 
+
+on desktop
+
+rus2 run voice_recognition command_publisher
+
+on rover
+
+ros2 launch barra_description rplidar.launch.py
+
+ros2 run mobile_base_unit mobile_base
+
+ros2 run mobile_base_unit voice_control
