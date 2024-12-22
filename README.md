@@ -12,6 +12,10 @@ sudo apt install ros-foxy-tf-transformations
 
 sudo apt install ros-foxy-ros2-control ros-foxy-ros2-controllers
 
+sudo apt install ros-foxy-navigation2 ros-foxy-nav2-bringup
+
+sudo apt install ros-foxy-slam-toolbox
+
 sudo apt install ros-foxy-librealsense2-*
 
 sudo apt install ros-foxy-rqt-image-view
@@ -76,8 +80,9 @@ ros2 launch barra_description joystick.launch.py
 ### Run safety behaviour
 
 
-ros2 launch barra_description rplidar.launch.py
+(ros2 launch barra_description rplidar.launch.py)
 
+ros2 launch rplidar_ros rplidar.launch.py
 
 
 ros2 launch barra_description launch_robot.launch.py
@@ -93,8 +98,6 @@ ros2 run mobile_base_unit mobile_base
 ros2 launch barra_description launch_sim.launch.py world:=./src/barra_description/worlds/obstacle.world
 
 
-
-
 ### For mapping
 
 ros2 launch barra_description launch_robot.launch.py
@@ -102,9 +105,15 @@ ros2 launch barra_description launch_robot.launch.py
 
 ros2 run mobile_base_unit mobile_base
 
-
-
 ros2 launch slam_toolbox online_async_launch.py params_file:=./ros2_ws/src/barra_description/config/mapper_params_online_async.yaml use_sim_time:=false
+
+
+### For save map 
+
+mkdir maps 
+
+ros2 run nav2_map_server map_saver_cli -f maps/my_map --ros-args -p save_map_timeout:=10000
+
 
 ### For navigation
 
